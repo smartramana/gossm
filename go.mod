@@ -1,8 +1,6 @@
 module github.com/gjbae1212/gossm
 
-go 1.22.0
-
-toolchain go1.22.5
+go 1.23.4
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
