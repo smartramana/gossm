@@ -10,7 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/fatih/color"
-	"github.com/gjbae1212/gossm/internal"
+	"github.com/smartramana/gossm/internal"
 	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -23,9 +23,9 @@ const (
 var (
 	// rootCmd represents the base command when called without any sub-commands
 	rootCmd = &cobra.Command{
-		Use:   "gossm",
-		Short: `gossm is interactive CLI tool that you select server in AWS and then could connect or send files your AWS server using start-session, ssh, scp in AWS Systems Manger Session Manager.`,
-		Long:  `gossm is interactive CLI tool that you select server in AWS and then could connect or send files your AWS server using start-session, ssh, scp in AWS Systems Manger Session Manager.`,
+		Use:   "mi-ssm",
+		Short: `mi-ssm is interactive CLI tool that you select server in AWS and then could connect or send files your AWS server using start-session, ssh, scp in AWS Systems Manger Session Manager.`,
+		Long:  `mi-ssm is interactive CLI tool that you select server in AWS and then could connect or send files your AWS server using start-session, ssh, scp in AWS Systems Manger Session Manager.`,
 	}
 
 	_version                 string
@@ -113,7 +113,7 @@ func initConfig() {
 	if sharedCredFile == "" {
 		// if gossm mfa credential is existed?
 		if _, err := os.Stat(_credentialWithMFA); !os.IsNotExist(err) {
-			color.Yellow("[Use] gossm default mfa credential file %s", _credentialWithMFA)
+			color.Yellow("[Use] mi-ssm default mfa credential file %s", _credentialWithMFA)
 			os.Setenv("AWS_SHARED_CREDENTIALS_FILE", _credentialWithMFA)
 			sharedCredFile = _credentialWithMFA
 		}
@@ -146,7 +146,7 @@ func initConfig() {
 		cred, err := awsConfig.Credentials.Retrieve(context.Background())
 		// delete invalid shared credential.
 		if err != nil || cred.Expired() || cred.AccessKeyID == "" || cred.SecretAccessKey == "" {
-			color.Yellow("[Expire] gossm default mfa credential file %s", sharedCredFile)
+			color.Yellow("[Expire] mi-ssm default mfa credential file %s", sharedCredFile)
 			os.Unsetenv("AWS_SHARED_CREDENTIALS_FILE")
 		} else {
 			_credential.awsConfig = &awsConfig

@@ -37,7 +37,7 @@ var (
 		"eu-central-1", "eu-north-1", "eu-south-1", "eu-west-1", "eu-west-2", "eu-west-3",
 		"me-south-1",
 		"sa-east-1",
-		"us-east-1", "us-east-2", "us-gov-east-1", "us-gov-west-2", "us-west-1", "us-west-2",
+		"us-east-1", "us-east-2", "us-west-1", "us-west-2",
 	}
 )
 
@@ -465,6 +465,32 @@ func SendCommand(ctx context.Context, cfg aws.Config, targets []*Target, command
 
 	// only support to linux (window = "AWS-RunPowerShellScript")
 	docName := "AWS-RunShellScript"
+	// docName := "AWS-RunPowerShellScript"
+
+	var ids []string
+	for _, t := range targets {
+		ids = append(ids, t.Name)
+	}
+
+	input := &ssm.SendCommandInput{
+		DocumentName:   &docName,
+		InstanceIds:    ids,
+		TimeoutSeconds: aws.Int32(60),
+		CloudWatchOutputConfig: &ssm_types.CloudWatchOutputConfig{
+			CloudWatchOutputEnabled: true,
+		},
+		Parameters: map[string][]string{"commands": []string{command}},
+	}
+
+	return client.SendCommand(ctx, input)
+}
+
+func SendCommandwin(ctx context.Context, cfg aws.Config, targets []*Target, command string) (*ssm.SendCommandOutput, error) {
+	client := ssm.NewFromConfig(cfg)
+
+	// only support to linux (window = "AWS-RunPowerShellScript")
+	//docName := "AWS-RunShellScript"
+	docName := "AWS-RunPowerShellScript"
 
 	var ids []string
 	for _, t := range targets {

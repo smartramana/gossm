@@ -16,8 +16,8 @@ import (
 
 var (
 	// cmdCommand is AWS Systems Manager Run Command.
-	cmdCommand = &cobra.Command{
-		Use:   "cmd",
+	cmdwinCommand = &cobra.Command{
+		Use:   "cmdwin",
 		Short: "Exec `run command` under AWS SSM with interactive CLI",
 		Long:  "Exec `run command` under AWS SSM with interactive CLI",
 		Run: func(cmd *cobra.Command, args []string) {
@@ -61,7 +61,7 @@ var (
 
 			internal.PrintReady(exec, _credential.awsConfig.Region, targetName)
 
-			sendOutput, err := internal.SendCommand(ctx, *_credential.awsConfig, targets, exec)
+			sendOutput, err := internal.SendCommandwin(ctx, *_credential.awsConfig, targets, exec)
 			if err != nil {
 				panicRed(err)
 			}
@@ -84,11 +84,11 @@ var (
 )
 
 func init() {
-	cmdCommand.Flags().StringP("exec", "e", "", "[required] execute command")
-	cmdCommand.Flags().StringP("target", "t", "", "[optional] it is ec2 instanceId.")
+	cmdwinCommand.Flags().StringP("exec", "e", "", "[required] execute command")
+	cmdwinCommand.Flags().StringP("target", "t", "", "[optional] it is ec2 instanceId.")
 
-	viper.BindPFlag("cmd-exec", cmdCommand.Flags().Lookup("exec"))
-	viper.BindPFlag("cmd-target", cmdCommand.Flags().Lookup("target"))
+	viper.BindPFlag("cmd-exec", cmdwinCommand.Flags().Lookup("exec"))
+	viper.BindPFlag("cmd-target", cmdwinCommand.Flags().Lookup("target"))
 
-	rootCmd.AddCommand(cmdCommand)
+	rootCmd.AddCommand(cmdwinCommand)
 }
